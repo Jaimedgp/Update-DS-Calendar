@@ -1,3 +1,4 @@
+import subprocess as s
 from cal_setup import get_calendar_service
 from datetime import datetime
 
@@ -29,9 +30,9 @@ class Event(object):
                 self.time = line
                 break
 
-        convert_time()
+        self.convert_time()
 
-        for j in range(i, len(self.data)):
+        for j in range(i+1, len(self.data)):
             if not self.data[j].isspace():
                 self.info[0] = self.data[j]
                 break
@@ -42,7 +43,7 @@ class Event(object):
 
     def convert_time(self):
 
-        time = [hr.remove("h") for hr in self.time.split("-")]
+        time = [hr.replace("h", "") for hr in self.time.split("-")]
 
         self.dt_start = datetime(self.date.year, self.date.month,
                                  self.date.day, int(time[0])).isoformat()
@@ -65,10 +66,10 @@ class Event(object):
 
 
 
-    def print_notify(self, data):
+    def print_notify(self):
 
         s.call(['notify-send', "--urgency=normal",
                                "--icon=/homejaimedgp/Pictures/python.png",
                                self.info[0]+" -> "+self.time,
-                               data[2]]
+                               self.info[2]]
               )
