@@ -1,3 +1,4 @@
+import subprocess as s
 from docx import Document
 from datetime import datetime
 
