@@ -1,4 +1,5 @@
-
+from cal_setup import get_calendar_service
+from datetime import datetime
 
 class Event(object):
     """
@@ -46,5 +47,20 @@ class Event(object):
                                  self.date.day, int(time[0])).isoformat()
         self.dt_end = datetime(self.date.year, self.date.month,
                                  self.date.day, int(time[1])).isoformat()
+
+
+    def upload_Calendar(self):
+
+        service = get_calendar_service()
+
+        event_result = service.events().insert(calendarId='UC',
+            body={
+                "summary": self.info[0],
+                "description": self.info[2]+" por el profesor "+self.info[1],
+                "start": {"dateTime": self.dt_start },
+                "end": {"dateTime": self.dt_end},
+            }
+        ).execute()
+
 
 
