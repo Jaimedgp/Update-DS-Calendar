@@ -3,17 +3,17 @@ from docx import Document
 from datetime import datetime
 
 
-class ReadDocx:
+class ReadDocx():
     """
         Read tables in the docx
     """
 
-    calendar = "/home/jaimedgp/Desktop/Calendario Master 2019_2020.docx"
+    def read_docx(self):
 
-    def read_docx():
+        calendar = "/home/jaimedgp/Desktop/Calendario Master 2019_2020.docx"
 
         doc = Document(calendar)
-        date = get_date()
+        date = self.get_date()
 
         all_tables = []
 
@@ -34,7 +34,7 @@ class ReadDocx:
                                         [date[2]].split("\n") if line != '']
 
 
-    def separate_hours(event):
+    def separate_hours(self, event):
 
         for i, item in enumerate(event):
             if "----" in item:
@@ -48,7 +48,7 @@ class ReadDocx:
 
 
 
-    def get_date():
+    def get_date(self):
         """
             Get date index to find cell in the docx
         """
@@ -64,10 +64,3 @@ class ReadDocx:
         return month, num_week, day_week
 
 
-    def print_notify(data):
-
-        s.call(['notify-send', "--urgency=normal",
-                               "--icon=/homejaimedgp/Pictures/python.png",
-                               data[1]+" -> "+data[0],
-                               data[3]]
-              )

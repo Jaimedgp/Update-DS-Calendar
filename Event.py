@@ -19,16 +19,17 @@ class Event(object):
 
         # [Subject, teacher, description]
         self.info = [None, None, None]
+        self.time = None
 
 
     def get_info(self):
 
         for i, line in enumerate(self.data):
             if "h" in line:
-                hour = line
+                self.time = line
                 break
 
-        convert_time(hour)
+        convert_time()
 
         for j in range(i, len(self.data)):
             if not self.data[j].isspace():
@@ -39,9 +40,9 @@ class Event(object):
         self.info[2] = self.data[j+2]
 
 
-    def convert_time(self, hour):
+    def convert_time(self):
 
-        time = [hr.remove("h") for hr in hour.split("-")]
+        time = [hr.remove("h") for hr in self.time.split("-")]
 
         self.dt_start = datetime(self.date.year, self.date.month,
                                  self.date.day, int(time[0])).isoformat()
@@ -64,3 +65,10 @@ class Event(object):
 
 
 
+    def print_notify(self, data):
+
+        s.call(['notify-send', "--urgency=normal",
+                               "--icon=/homejaimedgp/Pictures/python.png",
+                               self.info[0]+" -> "+self.time,
+                               data[2]]
+              )
