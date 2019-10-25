@@ -47,6 +47,7 @@ class Event(object):
 
         self.dt_start = datetime(self.date.year, self.date.month,
                                  self.date.day, int(time[0])).isoformat()
+
         self.dt_end = datetime(self.date.year, self.date.month,
                                  self.date.day, int(time[1])).isoformat()
 
@@ -55,12 +56,35 @@ class Event(object):
 
         service = get_calendar_service()
 
-        event_result = service.events().insert(calendarId='UC',
+        calendars_result = service.calendarList().list().execute()
+        calendars = calendars_result.get('items', [])
+
+        if not calendars:
+            return
+        for calendar in calendars:
+            if calendar['summary'] == 'Master':
+                ident = calendar['id']
+                break
+        else:
+            calendar = {
+                    'summary': 'Master',
+                    'timeZone': 'Europe/Amsterdam'
+            }
+
+            created_calendar = (service.calendars().
+                                insert(body=calendar).execute())
+
+            ident = created_calendar['id']
+
+
+        event_result = service.events().insert(calendarId=ident,
             body={
                 "summary": self.info[0],
                 "description": self.info[2]+" por el profesor "+self.info[1],
-                "start": {"dateTime": self.dt_start },
-                "end": {"dateTime": self.dt_end},
+                "start": {"dateTime": self.dt_start,
+                          "timeZone" : 'Europe/Amsterdam'},
+                "end": {"dateTime": self.dt_end,
+                        "timeZone" : 'Europe/Berlin'},
             }
         ).execute()
 
