@@ -12,6 +12,7 @@ if __name__ == '__main__':
 
     for clss in classes:
         evento = Event(datetime.today(), clss)
-        evento.get_info()
+        is_event = evento.get_info()
         evento.print_notify()
-        evento.upload_Calendar()
+        if is_event:
+            evento.upload_Calendar()

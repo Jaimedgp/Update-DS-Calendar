@@ -24,11 +24,22 @@ class Event(object):
 
 
     def get_info(self):
+        """
+            get info for the class from the cell ReadDocx
+
+            return: 1 if all is correct
+                    0 if not info founded
+        """
 
         for i, line in enumerate(self.data):
             if "h" in line:
                 self.time = line
                 break
+        else:
+            self.info = ["Not class Info", None,
+                         "No body info found in calendar for today"]
+            self.time = "free"
+            return 0
 
         self.convert_time()
 
@@ -39,6 +50,8 @@ class Event(object):
 
         self.info[1] = self.data[j+1]
         self.info[2] = self.data[j+2]
+
+        return 1
 
 
     def convert_time(self):
