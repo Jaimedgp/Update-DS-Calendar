@@ -12,7 +12,7 @@
 ################################################################################
 
 from docx import Document
-from datetime import datetime
+from datetime import date
 
 class ReadDocxFile(object):
 
@@ -31,12 +31,14 @@ class ReadDocxFile(object):
         """
         self._doc = Document(doc_name)
         if date == 'today':
-            self._date = datetime.today()
+            self._date = date.today()
         else:
             self._date = date
 
         # Cell coordinates for the day
         self.num_month, self.num_week, self.day_week = None, None, None
+
+        self.dy_schedule = None
 
 
     def get_date_coordinates(self):
@@ -78,11 +80,9 @@ class ReadDocxFile(object):
 
         for i, item in enumerate(event):
             if "----" in item:
-                day_schedule = [event[1:i], event[i+1:]]
+                self.dy_schedule = [event[1:i], event[i+1:]]
                 break
         else:
-            day_schedule = event[1:]
-
-        self.day_schedule
+            self.dy_schedule = event[1:]
 
 
