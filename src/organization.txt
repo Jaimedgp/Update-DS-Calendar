@@ -1,0 +1,94 @@
+--ReadDocx
+---Read the information from the 'Master en Ciencia de Datos' calendar
+---obtaining the classes information from the cell corresponding to a
+---certain date
+-----doc_name: path of the docx file
+-----date: date of the date to read
+                |
+                |
+            Atributes:
+        -day_week: day of the week of the class {0:Sunday, 
+                                                 1:Monday,...}
+        -num_week: number of the week of the month
+        -num_month: number of month {0:Octobre, ...,
+                                     3:January, ...}
+        -dy_schedule: list with the string for each class
+                |
+                |
+        get_date_coordinates
+    get coordiantes (num_month, num_week, num_month)
+            for the date's cell
+                |
+                |
+            read_cell
+                |
+                |
+            split_classes
+
+#==============================================================================
+
+--ClassEvent
+---Take information about the subject/date/teacher/Topic
+---from the data substracted in the docs
+-----String with the info from ReadDocx split_classes
+                |
+                |
+            Atributes:
+    -subject: Subject's name
+    -date: class date and hour 
+    -duration: duration of the class
+    -teacher: Teacher's name
+    -topic: the topic of the class
+                |
+                |
+            get_class_info
+    return 0 or 1 if there's class
+                |
+                |
+            get_class_date
+
+#==============================================================================
+
+--CalendarInteraction
+---Interact with google calendar
+-----A ClassEvent object is given
+                |
+                |
+            Atributes:
+    -service: took from the credentials
+    -calendar_id: id of 'Data-Science' calendar
+    -summary: Subject's name
+    -description: Information about the topic and the teacher
+    -dt_start: date and time the class start
+    -dt_end: date and time the class end
+                |
+                |
+        Check credential
+                |
+                |
+    Check and use 'Data-Science' Calendar
+                |
+                |
+        Replace/Upload event
+
+#==============================================================================
+
+--main
+---Program to update the Masters calendar from a docx document
+                |
+                |
+            update_day
+    update class information just 
+            for one day.
+        return a list with the day
+                |
+                |
+            update_week
+        update classes information 
+            for all the week
+        return a list with the days
+                |
+                |
+            get_notify
+        print a desktop notify with the day information
+
