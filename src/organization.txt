@@ -1,14 +1,18 @@
 --ReadDocx
----Read the information from the 'Master en Ciencia de Datos' calendar
----obtaining the classes information from the cell corresponding to a
----certain date
+---Read the information from the 'Master en Ciencia de Datos'
+---calendar obtaining the classes information from the cell 
+---corresponding to a certain date
+
 -----doc_name: path of the docx file
 -----date: date of the date to read
+
                 |
                 |
             Atributes:
+        -document = Document object with the file
         -day_week: day of the week of the class {0:Sunday, 
-                                                 1:Monday,...}
+                                                 1:Monday,...
+                                                }
         -num_week: number of the week of the month
         -num_month: number of month {0:Octobre, ...,
                                      3:January, ...}
@@ -16,7 +20,7 @@
                 |
                 |
         get_date_coordinates
-    get coordiantes (num_month, num_week, num_month)
+    get coordiantes (num_month, num_week, day_week)
             for the date's cell
                 |
                 |
@@ -25,12 +29,14 @@
                 |
             split_classes
 
-#==============================================================================
+#============================================================
 
 --ClassEvent
 ---Take information about the subject/date/teacher/Topic
 ---from the data substracted in the docs
------String with the info from ReadDocx split_classes
+
+-----ReadDocx object
+
                 |
                 |
             Atributes:
@@ -47,11 +53,13 @@
                 |
             get_class_date
 
-#==============================================================================
+#============================================================
 
 --CalendarInteraction
 ---Interact with google calendar
+
 -----A ClassEvent object is given
+
                 |
                 |
             Atributes:
@@ -71,10 +79,11 @@
                 |
         Replace/Upload event
 
-#==============================================================================
+#============================================================
 
 --main
----Program to update the Masters calendar from a docx document
+---Program to update the Masters calendar from a docx 
+---document
                 |
                 |
             update_day
@@ -91,4 +100,3 @@
                 |
             get_notify
         print a desktop notify with the day information
-

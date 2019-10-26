@@ -22,7 +22,7 @@ class ClassEvent(object):
         and the topic of the lesson
     """
 
-    def __init__(self, readed_docx):
+    def __init__(self, dy_schedule, date):
         """
             Separate the subject, the date and hour, the teacher's
             name and the topic of the lesson from the readed_docx
@@ -32,7 +32,8 @@ class ClassEvent(object):
 
         """
 
-        self._readed_docx = readed_docx
+        self._dy_schedule = dy_schedule
+        self._class_day = date
 
         self.subject = None
         self.date = None
@@ -51,7 +52,7 @@ class ClassEvent(object):
                      0 if there is not information to fill
         """
 
-        class_info = self._readed_docx.dy_schedule
+        class_info = self._dy_schedule
 
         for i, line in enumerate(class_info):
             if "h" in line:
@@ -60,7 +61,7 @@ class ClassEvent(object):
         else:
             return 0
 
-        for j in range(i+1:len(class_info)):
+        for j in range(i+1,len(class_info)):
             if not class_info[j].isspace():
                 self.subject = class_info[j]
                 break
@@ -82,8 +83,8 @@ class ClassEvent(object):
 
         hours = [hr.replace("h", "") for hr in time_string.split("-")]
 
-        self.date = datetime.combine(self._readed_docx._date,
-                                     time(int(hours[0])).isoformat()
+        self.date = datetime.combine(self._class_day,
+                                     time(int(hours[0]))).isoformat()
 
         self.duration = int(hours[1]) - int(hours[0])
 

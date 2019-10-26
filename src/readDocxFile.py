@@ -22,7 +22,7 @@ class ReadDocxFile(object):
         centain date
     """
 
-    def __init__(self, doc_name, date='today'):
+    def __init__(self, doc_name):
         """
             Read a .docx file formed by tables (per month) as a calendar
 
@@ -30,15 +30,6 @@ class ReadDocxFile(object):
             :date: date to read <class type='datetime'>
         """
         self._doc = Document(doc_name)
-        if date == 'today':
-            self._date = date.today()
-        else:
-            self._date = date
-
-        # Cell coordinates for the day
-        self.num_month, self.num_week, self.day_week = None, None, None
-
-        self.dy_schedule = None
 
 
     def get_date_coordinates(self):
@@ -47,42 +38,57 @@ class ReadDocxFile(object):
             date's cell
         """
 
-        self.day_week  = self._date.weekday() + 1
-        self.num_week = (self._date.isocalendar()[1]
+        day_week  = self._date.weekday() + 1
+        if day_week == 7: day_week = 0
+
+        num_week = (self._date.isocalendar()[1]
                         - self._date.replace(day=1).isocalendar()[1] + 2)
 
-        self.num_month = self._date.month - 10
+        num_month = self._date.month - 10
 
-        if self.num_month < 0:
-            self.num_month += 12
+        if num_month < 0:
+            num_month += 12
+
+        return num_month, num_week, day_week
 
 
-    def read_cell(self):
+    def read_cell(self, date='today'):
         """
             Read the string of the coordinates' cell
         """
 
-        cell_string =  tuple(self._doc.tables[self.num_month]
-                                             [self.num_week]
-                                             [self.day_week].text
-                            )
+        if date == 'today':
+            self._date = date.today()
+        else:
+            self._date = date
 
-        return [ line for line in cell_string.split("\n") if line != '']
+        coordinates = self.get_date_coordinates()
+
+        cell_string =  (self._doc.tables[coordinates[0]].
+                                         rows[coordinates[1]].
+                                        cells[coordinates[2]].text
+                       )
+
+        dy_schedule = self.split_classes(
+                                    [line for line in cell_string.split("\n")
+                                                                if line != '']
+                                   )
+        return dy_schedule
 
 
-    def split_classes(self):
+    def split_classes(self, cell_info):
         """
             Some cells have two classes information separated by
             a '----' line, so it is necessary to split both strings
         """
 
-        event = self.read_cell()
-
-        for i, item in enumerate(event):
+        for i, item in enumerate(cell_info):
             if "----" in item:
-                self.dy_schedule = [event[1:i], event[i+1:]]
+                dy_schedule = [cell_info[1:i], cell_info[i+1:]]
                 break
         else:
-            self.dy_schedule = event[1:]
+            dy_schedule = cell_info[1:]
+
+        return dy_schedule
 
 

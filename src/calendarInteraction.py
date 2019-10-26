@@ -32,7 +32,7 @@ class CalendarInteraction(object):
         self._class_event = class_event
 
         self.service = get_calendar_service()
-        self.calendar_id = None
+        self.calendar_id = self.get_id_calendar()
 
         self.summary = self._class_event.subject
         self.description = "%s by professor %s" %(self._class_event.topic,
@@ -48,15 +48,14 @@ class CalendarInteraction(object):
             if it is not. Then obtain its id
         """
 
-        calendars_result = service.calendarList().list().execute()
+        calendars_result = self.service.calendarList().list().execute()
         calendars = calendars_result.get('items', [])
 
         if not calendars:
             return
         for calendar in calendars:
             if calendar['summary'] == 'Data-Science':
-                self.calendar_id = calendar['id']
-                break
+                return calendar['id']
         else:
             calendar = {
                     'summary': 'Data-Science',
@@ -66,7 +65,7 @@ class CalendarInteraction(object):
             created_calendar = (service.calendars().
                                 insert(body=calendar).execute())
 
-            self.calendar_id = created_calendar['id']
+        return created_calendar['id']
 
 
     def event_exists(self):
