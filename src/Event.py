@@ -75,12 +75,12 @@ class Event(object):
         if not calendars:
             return
         for calendar in calendars:
-            if calendar['summary'] == 'Master':
+            if calendar['summary'] == 'Data-Science':
                 ident = calendar['id']
                 break
         else:
             calendar = {
-                    'summary': 'Master',
+                    'summary': 'Data-Science',
                     'timeZone': 'Europe/Amsterdam'
             }
 
