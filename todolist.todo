@@ -1,9 +1,10 @@
 Errors:
-    ☐  Day without class 
+    ☐ CalndrIntrc just open google Calendar
 
 Implementation:
     ☐  Upload Calendar event (not only create)
     ☐  Pass date to ReadDocx
+    ☐  Pass doc to ReadDocx
     ☐  Automatize executation
 
 More Features:
@@ -11,4 +12,6 @@ More Features:
     ☐  Download docx autimatic
     ☐  Eassy installation process
 
-
+＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
+Archive:
+    ✔  Day without class  @done(2019-10-26 12:57) @project(Errors)
