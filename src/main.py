@@ -27,6 +27,18 @@ def update_day():
     return [date.today()]
 
 
+def update_tomorrow():
+    """
+        Upload the class schedule for tomorrow
+
+        :return: list with datetime object for tomorrow
+    """
+
+    today_date = date.today()
+
+    return [today_date+timedelta(days=1)]
+
+
 def update_week():
     """
         Upload the class schedule for the next 7 days
@@ -36,7 +48,7 @@ def update_week():
 
     today_date = date.today()
 
-    return [today_date+timedelta(day=i) for i in reversed(range(8))]
+    return [today_date+timedelta(days=i) for i in reversed(range(8))]
 
 
 def update_month():
@@ -55,7 +67,7 @@ def update_month():
 
     for ky, vl in day_in_month.items():
         if today_date.month in vl:
-            return [today_date+timedelta(day=i)
+            return [today_date+timedelta(days=i)
                                         for i in reversed(range(ky))]
     else:
         sys.exit()
@@ -79,10 +91,11 @@ if __name__ == '__main__':
     try:
         param = sys.argv[1]
 
-        if "-w" in param:
-            print dy
+        if "-t" == param:
+            days = update_tomorrow()
+        elif "-w" == param:
             days = update_week()
-        elif "-m" in param:
+        elif "-m" == param:
             days = update_month()
         else:
             days = update_day()
@@ -92,17 +105,18 @@ if __name__ == '__main__':
     calendar_doc = "/home/jaimedgp/Desktop/Calendario Master 2019_2020.docx"
 
     read_doc = ReadDocxFile(calendar_doc)
+    calendar_event = CalendarInteraction()
 
     for dy in days:
         schedule = read_doc.read_cell(dy)
 
         for clss in schedule:
 
-            lesson = ClassEvent(schedule, dy)
+            lesson = ClassEvent(clss, dy)
             is_class = lesson.get_class_info()
 
             if is_class:
-                calendar_event = CalendarInteraction(lesson)
+                calendar_event.set_event(lesson)
                 calendar_event.push_event()
 
                 exc_correct = True
@@ -116,7 +130,7 @@ if __name__ == '__main__':
             start_time = calendar_event.dt_start.split("T")[1].split(":")
             end_time = calendar_event.dt_end.split("T")[1].split(":")
 
-            title = "%s ==> %i-%i" %(calendar_event.summary,
+            title = "%s ==> %s-%s" %(calendar_event.summary,
                                     ":".join(start_time[:2]),
                                     ":".join(end_time[:2])
                                     )
