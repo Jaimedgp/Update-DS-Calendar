@@ -66,12 +66,12 @@ class ReadDocxFile(object):
 
         cell_string =  (self._doc.tables[coordinates[0]].
                                          rows[coordinates[1]].
-                                        cells[coordinates[2]].text
+                                        cells[coordinates[2]].paragraphs
                        )
 
         dy_schedule = self.split_classes(
-                                    [line for line in cell_string.split("\n")
-                                                                if line != '']
+                                    [line.text for line in cell_string
+                                                                if line.text != '']
                                    )
         return dy_schedule
 
