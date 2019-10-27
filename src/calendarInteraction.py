@@ -11,7 +11,6 @@
 # github: https://github.com/Jaimedgp
 ################################################################################
 
-from cal_setup import get_calendar_service
 from datetime import timedelta
 
 class CalendarInteraction(object):
@@ -22,14 +21,14 @@ class CalendarInteraction(object):
         the class event
     """
 
-    def __init__(self):
+    def __init__(self, service):
         """
             Upload the class event to the Google Calendar application
             with the needed information. The program must be able to
             create the new calendar 'Data-Science' if it does not exists
         """
 
-        self._service = get_calendar_service()
+        self._service = service
         self._calendar_id = self.get_id_calendar()
 
         self.summary, self.description = None, None

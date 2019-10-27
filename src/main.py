@@ -11,9 +11,13 @@
 import subprocess as s
 import sys
 
+from os import unlink
+
+from cal_setup import get_services
 from readDocxFile import ReadDocxFile
 from classEvent import ClassEvent
 from calendarInteraction import CalendarInteraction
+from downloadDocxFile import get_Docx_File
 
 from datetime import date, timedelta
 
@@ -102,10 +106,16 @@ if __name__ == '__main__':
     except Exception:
         days = update_day()
 
-    calendar_doc = "../doc/Calendario Master 2019_2020.docx"
+    calendar_srvic, drive_srvic = get_services()
 
-    read_doc = ReadDocxFile(calendar_doc)
-    calendar_event = CalendarInteraction()
+    #calendar_doc = "../doc/Calendario Master 2019_2020.docx"
+
+    file_id = '1Fs35WnSE1NNR1jRZklflA76oDE6mrSBxNMo7rN5ir9s'
+
+    file_path = get_Docx_File(drive_srvic, file_id)
+
+    read_doc = ReadDocxFile(file_path)
+    calendar_event = CalendarInteraction(calendar_srvic)
 
     for dy in days:
         schedule = read_doc.read_cell(dy)
@@ -141,5 +151,7 @@ if __name__ == '__main__':
             body = "No body information found in calendar for today"
 
         get_notify(title, body, "/homejaimedgp/Pictures/python.png")
+
+    unlink(file_path)
 
 
