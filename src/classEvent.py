@@ -68,8 +68,11 @@ class ClassEvent(object):
         else:
             return 0
 
-        self.teacher = class_info[j+1]
-        self.topic = class_info[j+2]
+        try:
+            self.teacher = class_info[j+1]
+            self.topic = class_info[j+2]
+        except IndexError:
+            pass
 
         return 1
 
@@ -83,8 +86,7 @@ class ClassEvent(object):
 
         hours = [hr.replace("h", "") for hr in time_string.split("-")]
 
-        self.date = datetime.combine(self._class_day,
-                                     time(int(hours[0]))).isoformat()
+        self.date = datetime.combine(self._class_day, time(int(hours[0])))
 
         self.duration = int(hours[1]) - int(hours[0])
 
