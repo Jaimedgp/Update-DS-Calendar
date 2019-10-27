@@ -22,24 +22,18 @@ class CalendarInteraction(object):
         the class event
     """
 
-    def __init__(self, class_event):
+    def __init__(self):
         """
             Upload the class event to the Google Calendar application
             with the needed information. The program must be able to
             create the new calendar 'Data-Science' if it does not exists
         """
 
-        self._class_event = class_event
+        self._service = get_calendar_service()
+        self._calendar_id = self.get_id_calendar()
 
-        self.service = get_calendar_service()
-        self.calendar_id = self.get_id_calendar()
-
-        self.summary = self._class_event.subject
-        self.description = "%s by professor %s" %(self._class_event.topic,
-                                                  self._class_event.teacher)
-
-        self.dt_start = self._class_event.date
-        self.dt_end = self.dt_start + timedelta(self._class_event.duration)
+        self.summary, self.description = None, None
+        self.dt_start, self.dt_end = None, None
 
 
     def get_id_calendar(self):
@@ -48,7 +42,7 @@ class CalendarInteraction(object):
             if it is not. Then obtain its id
         """
 
-        calendars_result = self.service.calendarList().list().execute()
+        calendars_result = self._service.calendarList().list().execute()
         calendars = calendars_result.get('items', [])
 
         if not calendars:
@@ -62,10 +56,24 @@ class CalendarInteraction(object):
                     'timeZone': 'Europe/Amsterdam'
             }
 
-            created_calendar = (service.calendars().
+            created_calendar = (self._service.calendars().
                                 insert(body=calendar).execute())
 
         return created_calendar['id']
+
+
+    def set_event(self, class_event):
+        """
+            read and store class event information
+        """
+
+        self.summary = class_event.subject
+        self.description = "%s by professor %s" %(class_event.topic,
+                                                  class_event.teacher)
+
+        self.dt_start = class_event.date.isoformat()
+        self.dt_end = (class_event.date
+                       + timedelta(hours=class_event.duration)).isoformat()
 
 
     def event_exists(self):
@@ -73,12 +81,12 @@ class CalendarInteraction(object):
             Check if there is an event at that time already
         """
 
-        events_result = self.service.events().list(
-                                            calendarId=self.calendar_id,
-                                            timeMin=self.dt_start.isoformat(),
+        events_result = (self._service.events().list(
+                                            calendarId=self._calendar_id,
+                                            timeMin=self.dt_start+'Z',
                                             maxResults=2,
                                             singleEvents=True,
-                                            orderBy='startTime').execute()
+                                            orderBy='startTime').execute())
 
         events = events_result.get('items', [])
 
@@ -86,7 +94,7 @@ class CalendarInteraction(object):
             return False
         for event in events:
             start = event['start'].get('dateTime')
-            if start == self.dt_start.isoformat():
+            if start == self.dt_start:
                 return event['id']
         else:
             return False
@@ -102,7 +110,8 @@ class CalendarInteraction(object):
         is_event = self.event_exists()
 
         if is_event:
-            service.events().update(calendarId=self.calendar_id,
+            self._service.events().update(
+                                calendarId=self._calendar_id,
                                 eventId=is_event,
                                 body={
                                     "summary": self.summary,
@@ -112,9 +121,10 @@ class CalendarInteraction(object):
                                     "end": {"dateTime": self.dt_end,
                                             "timeZone": 'Europe/Amsterdam'},
                                      },
-                                    ).execute()
+                                         ).execute()
         else:
-            service.events().update(calendarId=self.calendar_id,
+            self._service.events().insert(
+                                calendarId=self._calendar_id,
                                 body={
                                     "summary": self.summary,
                                     "description": self.description,
@@ -123,4 +133,4 @@ class CalendarInteraction(object):
                                     "end": {"dateTime": self.dt_end,
                                             "timeZone": 'Europe/Amsterdam'},
                                      },
-                                    ).execute()
+                                         ).execute()
