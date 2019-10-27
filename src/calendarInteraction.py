@@ -93,7 +93,7 @@ class CalendarInteraction(object):
         if not events:
             return False
         for event in events:
-            start = event['start'].get('dateTime')
+            start = event['start'].get('dateTime').split("+")[0]
             if start == self.dt_start:
                 return event['id']
         else:
