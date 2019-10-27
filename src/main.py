@@ -102,7 +102,7 @@ if __name__ == '__main__':
     except Exception:
         days = update_day()
 
-    calendar_doc = "/home/jaimedgp/Desktop/Calendario Master 2019_2020.docx"
+    calendar_doc = "../doc/Calendario Master 2019_2020.docx"
 
     read_doc = ReadDocxFile(calendar_doc)
     calendar_event = CalendarInteraction()
