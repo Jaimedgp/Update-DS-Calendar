@@ -148,7 +148,7 @@ if __name__ == '__main__':
             title = "No Class Information"
             body = "No body information found in calendar for today"
 
-        get_notify(title, body, "/homejaimedgp/Pictures/python.png")
+        get_notify(title, body, "../doc/icon/icon.png")
 
     unlink(file_path)
 
