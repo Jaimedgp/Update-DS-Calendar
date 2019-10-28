@@ -36,7 +36,7 @@ def parameter_options(param):
     features = {"-d" : [today_date],
                 "-t" : [today_date+timedelta(days=1)],
                 "-w" : [today_date+timedelta(days=i)
-                         for i in reversed(range(8-today_date.day))],
+                         for i in reversed(range(8-today_date.weekday()))],
                 "-m" : get_month()}
 
     if param in features.keys():
