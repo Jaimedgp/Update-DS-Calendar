@@ -1,15 +1,18 @@
 Errors:
-    ☐  check if event exists
+    ☐  blank text when hyperlink
 
 Implementation:
-    ☐  Automatize executation
+    ☐  Show last day information
+    ☐  Error Notification
 
 More Features:
-    ☐  Download docx autimatic
+    ☐  Automatize executation
     ☐  Eassy installation process
 
 ＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿
 Archive:
+    ✔  check if event exists @done(2019-10-28 09:30) @project(Errors)
+    ✔  Download docx autimatic @done(2019-10-28 09:30) @project(More Features)
     ✔  Week information @done(2019-10-27 11:21) @project(More Features)
     ✔  Upload Calendar event (not only create) @done(2019-10-27 11:20) @project(Implementation)
     ✔  Pass date to ReadDocx @done(2019-10-27 11:20) @project(Implementation)
