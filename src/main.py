@@ -69,14 +69,12 @@ def update_month():
                      31:[1, 3, 5, 7, 8, 10, 12]
                     }
 
-    for ky, vl in day_in_month.items():
+    for ky, vl in days_in_month.items():
         if today_date.month in vl:
             return [today_date+timedelta(days=i)
                                         for i in reversed(range(ky))]
     else:
         sys.exit()
-
-
 
 
 def get_notify(title, body, icon_path):
@@ -92,23 +90,23 @@ def get_notify(title, body, icon_path):
 
 if __name__ == '__main__':
 
+    features = {"-d" : update_day(),
+                "-t" : update_tomorrow(),
+                "-w" : update_week(),
+                "-m" : update_month()}
+
     try:
         param = sys.argv[1]
 
-        if "-t" == param:
-            days = update_tomorrow()
-        elif "-w" == param:
-            days = update_week()
-        elif "-m" == param:
-            days = update_month()
+        if param in features.keys():
+            days = features[param]
         else:
             days = update_day()
+
     except Exception:
         days = update_day()
 
     calendar_srvic, drive_srvic = get_services()
-
-    #calendar_doc = "../doc/Calendario Master 2019_2020.docx"
 
     file_id = '1Fs35WnSE1NNR1jRZklflA76oDE6mrSBxNMo7rN5ir9s'
 
