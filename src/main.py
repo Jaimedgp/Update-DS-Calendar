@@ -1,3 +1,5 @@
+##!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #
 # main 
 #-----------------
@@ -12,6 +14,7 @@ import subprocess as s
 import sys
 
 from os import unlink
+from os import getcwd
 
 from cal_setup import get_services
 from readDocxFile import ReadDocxFile
@@ -21,48 +24,33 @@ from downloadDocxFile import get_Docx_File
 
 from datetime import date, timedelta
 
-def update_day():
+today_date = date.today()
+
+def parameter_options(param):
     """
         Upload the class schedule for today
 
-        :return: list with today() datetime object
+        :return: list with days datetime objects
     """
 
-    return [date.today()]
+    features = {"-d" : [today_date],
+                "-t" : [today_date+timedelta(days=1)],
+                "-w" : [today_date+timedelta(days=i)
+                         for i in reversed(range(8-today_date.day))],
+                "-m" : get_month()}
+
+    if param in features.keys():
+        return features[param]
+    else:
+        return [today_date]
 
 
-def update_tomorrow():
-    """
-        Upload the class schedule for tomorrow
-
-        :return: list with datetime object for tomorrow
-    """
-
-    today_date = date.today()
-
-    return [today_date+timedelta(days=1)]
-
-
-def update_week():
-    """
-        Upload the class schedule for the next 7 days
-
-        :return: list with datetime objects for the week
-    """
-
-    today_date = date.today()
-
-    return [today_date+timedelta(days=i) for i in reversed(range(8))]
-
-
-def update_month():
+def get_month():
     """
         Upload the class schedule for the next month
 
         :return: list with datetime objects for the month
     """
-
-    today_date = date.today()
 
     days_in_month = {28:[2],
                      30:[4, 6, 9, 11],
@@ -71,6 +59,7 @@ def update_month():
 
     for ky, vl in days_in_month.items():
         if today_date.month in vl:
+            left_days = ky-today_date.day
             return [today_date+timedelta(days=i)
                                         for i in reversed(range(ky))]
     else:
@@ -90,21 +79,13 @@ def get_notify(title, body, icon_path):
 
 if __name__ == '__main__':
 
-    features = {"-d" : update_day(),
-                "-t" : update_tomorrow(),
-                "-w" : update_week(),
-                "-m" : update_month()}
+    print getcwd()
 
     try:
         param = sys.argv[1]
-
-        if param in features.keys():
-            days = features[param]
-        else:
-            days = update_day()
-
-    except Exception:
-        days = update_day()
+        days = parameter_options(param)
+    except IndexError:
+        days = [today_date]
 
     calendar_srvic, drive_srvic = get_services()
 
@@ -127,26 +108,19 @@ if __name__ == '__main__':
                 calendar_event.set_event(lesson)
                 calendar_event.push_event()
 
-                exc_correct = True
+    if is_class:
+        start_time = calendar_event.dt_start.split("T")[1].split(":")
+        end_time = calendar_event.dt_end.split("T")[1].split(":")
 
-            else:
+        title = "%s ==> %s-%s" %(calendar_event.summary,
+                                ":".join(start_time[:2]),
+                                ":".join(end_time[:2])
+                                )
+        body = calendar_event.description
 
-                exc_correct = False
-
-    if len(days) < 2:
-        if exc_correct:
-            start_time = calendar_event.dt_start.split("T")[1].split(":")
-            end_time = calendar_event.dt_end.split("T")[1].split(":")
-
-            title = "%s ==> %s-%s" %(calendar_event.summary,
-                                    ":".join(start_time[:2]),
-                                    ":".join(end_time[:2])
-                                    )
-            body = calendar_event.description
-
-        else:
-            title = "No Class Information"
-            body = "No body information found in calendar for today"
+    else:
+        title = "No Class Information"
+        body = "No body information found in calendar for today"
 
         get_notify(title, body, "../doc/icon/icon.png")
 
