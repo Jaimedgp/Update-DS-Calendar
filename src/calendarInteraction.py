@@ -61,7 +61,7 @@ class CalendarInteraction(object):
         return created_calendar['id']
 
 
-    def set_event(self, class_event):
+    def set_class_event(self, class_event):
         """
             read and store class event information
         """
