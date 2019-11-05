@@ -14,6 +14,8 @@
 from docx import Document
 from datetime import date
 
+from classEvent import ClassEvent
+
 class ReadDocxFile(object):
 
     """
@@ -73,7 +75,13 @@ class ReadDocxFile(object):
                                     [line.text for line in cell_string
                                                                 if line.text != '']
                                    )
-        return dy_schedule
+
+        classes = []
+
+        for clss in dy_schedule:
+            classes.append(ClassEvent(clss, self._date))
+
+        return classes
 
 
     def split_classes(self, cell_info):
