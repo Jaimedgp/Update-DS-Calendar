@@ -52,7 +52,7 @@ def rest_week_date():
         rest_dys = np.arange(5)
         rest_dys += (7 - wk_day)
 
-    return [today_dt+timedelta(days=i) for i in rest_dys[::-1]]
+    return [today_dt+timedelta(days=int(i)) for i in rest_dys[::-1]]
 
 
 def rest_month_date():
@@ -71,13 +71,13 @@ def rest_month_date():
 
     for ky, vl in days_in_month.items():
         if today_dt.month in vl:
-            rest_dys = np.arange(vl - today_dt.day)
+            rest_dys = np.arange(ky - today_dt.day)
 
             # pop weekend days
             for i in rest_dys[::-1]:
-                day = today_dt+timedelta(days=i)
+                day = today_dt+timedelta(days=int(i))
 
-                if day.weekday < 5:
+                if day.weekday() < 5:
                     rest_month.append(day)
 
             return rest_month

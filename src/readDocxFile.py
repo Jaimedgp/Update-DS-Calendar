@@ -95,7 +95,7 @@ class ReadDocxFile(object):
                 dy_schedule = [cell_info[1:i], cell_info[i+1:]]
                 break
         else:
-            dy_schedule = cell_info[1:]
+            dy_schedule = [cell_info[1:]]
 
         return dy_schedule
 

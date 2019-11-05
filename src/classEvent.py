@@ -52,25 +52,23 @@ class ClassEvent(object):
                      0 if there is not information to fill
         """
 
-        class_info = self._dy_schedule
-
-        for i, line in enumerate(class_info):
+        for i, line in enumerate(self._dy_schedule):
             if "h" in line:
                 self.get_class_date(line)
                 break
         else:
             return 0
 
-        for j in range(i+1,len(class_info)):
-            if not class_info[j].isspace():
-                self.subject = class_info[j]
+        for j in range(i+1,len(self._dy_schedule)):
+            if not self._dy_schedule[j].isspace():
+                self.subject = self._dy_schedule[j]
                 break
         else:
             return 0
 
         try:
-            self.teacher = class_info[j+1]
-            self.topic = class_info[j+2]
+            self.teacher = self._dy_schedule[j+1]
+            self.topic = self._dy_schedule[j+2]
         except IndexError:
             pass
 

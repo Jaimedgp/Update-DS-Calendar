@@ -74,6 +74,8 @@ class CalendarInteraction(object):
         self.dt_end = (class_event.date
                        + timedelta(hours=class_event.duration)).isoformat()
 
+        self.push_event()
+
 
     def event_exists(self):
         """
