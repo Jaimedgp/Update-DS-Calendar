@@ -1,155 +1,45 @@
-#
-# main 
-#-----------------
-# This script is the main script of the Master-Schedule program to 
-# update the master calendar automatically from the docx file to Google Drive
-#
-# author: Jaime Diez Gonzalez-Pardo (Jaimedgp)
-# github: https://github.com/Jaimedgp
-################################################################################
-
-import subprocess as s
+import os
 import sys
 
-from os import unlink
-
+from datesGenerator import *
 from cal_setup import get_services
+from intrctDrive import DriveInteraction
+from intrctCalendar import CalendarInteraction
 from readDocxFile import ReadDocxFile
-from classEvent import ClassEvent
-from calendarInteraction import CalendarInteraction
-from downloadDocxFile import get_Docx_File
 
-from datetime import date, timedelta
-
-def update_day():
-    """
-        Upload the class schedule for today
-
-        :return: list with today() datetime object
-    """
-
-    return [date.today()]
+features = {"-d" : today_date(),
+            "-t" : tomorrow_date(),
+            "-w" : rest_week_date(),
+            "-m" : rest_month_date()}
 
 
-def update_tomorrow():
-    """
-        Upload the class schedule for tomorrow
-
-        :return: list with datetime object for tomorrow
-    """
-
-    today_date = date.today()
-
-    return [today_date+timedelta(days=1)]
-
-
-def update_week():
-    """
-        Upload the class schedule for the next 7 days
-
-        :return: list with datetime objects for the week
-    """
-
-    today_date = date.today()
-
-    return [today_date+timedelta(days=i) for i in reversed(range(8))]
-
-
-def update_month():
-    """
-        Upload the class schedule for the next month
-
-        :return: list with datetime objects for the month
-    """
-
-    today_date = date.today()
-
-    days_in_month = {28:[2],
-                     30:[4, 6, 9, 11],
-                     31:[1, 3, 5, 7, 8, 10, 12]
-                    }
-
-    for ky, vl in days_in_month.items():
-        if today_date.month in vl:
-            return [today_date+timedelta(days=i)
-                                        for i in reversed(range(ky))]
-    else:
-        sys.exit()
-
-
-def get_notify(title, body, icon_path):
-    """
-        Show desktop notifications for the update process
-    """
-
-    s.call(['notify-send', "--urgency=normal",
-                           "--icon="+icon_path,
-                           title, body
-           ])
-
+file_id = '1Fs35WnSE1NNR1jRZklflA76oDE6mrSBxNMo7rN5ir9s'
 
 if __name__ == '__main__':
 
-    features = {"-d" : update_day(),
-                "-t" : update_tomorrow(),
-                "-w" : update_week(),
-                "-m" : update_month()}
+    abs_path = os.path.dirname(os.path.realpath(__file__))
+    os.chdir(abs_path)
 
     try:
-        param = sys.argv[1]
-
-        if param in features.keys():
-            days = features[param]
-        else:
-            days = update_day()
-
+        services = get_services()
     except Exception:
-        days = update_day()
+        print("Not Internet Connection")
+        sys.exit()
+    try:
+        param = sys.argv[1]
+    except IndexError:
+        param = "-d"
 
-    calendar_srvic, drive_srvic = get_services()
+    drive_srvic = DriveInteraction(services[1])  ##
+    calendar_srvic = CalendarInteraction(services[0])  ##
 
-    file_id = '1Fs35WnSE1NNR1jRZklflA76oDE6mrSBxNMo7rN5ir9s'
+    docx_file = ReadDocxFile(drive_srvic.dwnld_docx_file(file_id)) ###
 
-    file_path = get_Docx_File(drive_srvic, file_id)
+    for dy in features[param]:
+        class_dy = docx_file.read_cell(dy)
 
-    read_doc = ReadDocxFile(file_path)
-    calendar_event = CalendarInteraction(calendar_srvic)
+        for clss in class_dy:
+            if clss.get_class_info():
+                calendar_srvic.set_class_event(clss)
 
-    for dy in days:
-        schedule = read_doc.read_cell(dy)
-
-        for clss in schedule:
-
-            lesson = ClassEvent(clss, dy)
-            is_class = lesson.get_class_info()
-
-            if is_class:
-                calendar_event.set_event(lesson)
-                calendar_event.push_event()
-
-                exc_correct = True
-
-            else:
-
-                exc_correct = False
-
-    if len(days) < 2:
-        if exc_correct:
-            start_time = calendar_event.dt_start.split("T")[1].split(":")
-            end_time = calendar_event.dt_end.split("T")[1].split(":")
-
-            title = "%s ==> %s-%s" %(calendar_event.summary,
-                                    ":".join(start_time[:2]),
-                                    ":".join(end_time[:2])
-                                    )
-            body = calendar_event.description
-
-        else:
-            title = "No Class Information"
-            body = "No body information found in calendar for today"
-
-        get_notify(title, body, "../doc/icon/icon.png")
-
-    unlink(file_path)
-
-
+    del drive_srvic
