@@ -59,12 +59,14 @@ def import_package():
 
 if __name__ == '__main__':
 
+    abs_path = os.path.dirname(os.path.realpath(__file__))
+    os.chdir(abs_path)
+
     print("Installing missing modules")
     check_modules()
     print("Compiling .py files")
     import_package()
 
-    abs_path = os.path.dirname(os.path.realpath(__file__))
     features = {"today" : "-d",
                 "tomorrow" : "-t",
                 "week" : "-w",
