@@ -1,10 +1,15 @@
 import importlib
 import os
 import getpass
+import pip
+
+if int(pip.__version__.split('.')[0])>9:
+    from pip._internal import main as pipmain
+else:
+    from pip import main as pipmain
 
 
 def check_modules():
-    from pip._internal import main as pipmain
 
     packages = {"docx" : "python-docx",
                 "googleapiclient" : "google-api-python-client",
