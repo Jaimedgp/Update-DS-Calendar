@@ -8,6 +8,7 @@ from cal_setup import get_services
 from intrctDrive import DriveInteraction
 from intrctCalendar import CalendarInteraction
 from readDocxFile import ReadDocxFile
+from getNotification import GetNotify
 
 features = {"-d" : today_date(),
             "-t" : tomorrow_date(),
@@ -43,5 +44,8 @@ if __name__ == '__main__':
         for clss in class_dy:
             if clss.get_class_info():
                 calendar_srvic.set_class_event(clss)
+    else:
+        if clss.get_class_info():
+            GetNotify().class_info(calendar_srvic)
 
     del drive_srvic
