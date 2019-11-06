@@ -3,6 +3,8 @@ import os
 import getpass
 import pip
 
+from crontab import CronTab
+
 if int(pip.__version__.split('.')[0])>9:
     from pip._internal import main as pipmain
 else:
@@ -27,7 +29,6 @@ def check_modules():
 class useCronTab(object):
 
     def __init__(self):
-        from crontab import CronTab
 
         usr_name = getpass.getuser()
         self.my_cron = CronTab(user=usr_name)

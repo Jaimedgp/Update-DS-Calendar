@@ -11,7 +11,7 @@ class GetNotify(object):
 
     def __init__(self):
 
-        path = Path(os.get(cwd))
+        path = Path(os.getcwd())
         self.icon_path = path.parent+"doc/icon.png"
 
 
