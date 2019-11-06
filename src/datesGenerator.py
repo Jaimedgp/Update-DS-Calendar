@@ -1,5 +1,4 @@
 from datetime import date, timedelta
-import numpy as np
 
 today_dt = date.today()
 wk_day = today_dt.weekday()
@@ -41,16 +40,16 @@ def rest_week_date():
     rest_dys = None
 
     if wk_day < 3:
-        rest_dys = np.arange(5-wk_day)
+        rest_dys = [i for i in range(5-wk_day)]
 
     elif wk_day < 5:
-        next_wk = np.arange(5)
-        next_wk += (7 - wk_day)
-        rest_dys = np.concatenate((np.arange(4 - wk_day), next_wk))
+        next_wk = (7 - wk_day)
+        rest_dys = ([i for i in range(4 - wk_day)]
+                    + [i for i in range(next_wk, next_wk+5)])
 
     else:
-        rest_dys = np.arange(5)
-        rest_dys += (7 - wk_day)
+        next_wk = (7 - wk_day)
+        rest_dys = [i for i in range(next_wk, next_wk+5)]
 
     return [today_dt+timedelta(days=int(i)) for i in rest_dys[::-1]]
 
@@ -71,7 +70,7 @@ def rest_month_date():
 
     for ky, vl in days_in_month.items():
         if today_dt.month in vl:
-            rest_dys = np.arange(ky - today_dt.day)
+            rest_dys = [i for i in range(ky - today_dt.day)]
 
             # pop weekend days
             for i in rest_dys[::-1]:
