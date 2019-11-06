@@ -12,7 +12,7 @@ class GetNotify(object):
     def __init__(self):
 
         path = Path(os.getcwd())
-        self.icon_path = path.parent+"doc/icon.png"
+        self.icon_path = str(path.parent)+"/doc/icon.png"
 
 
     def class_info(self, calendar):
@@ -35,7 +35,7 @@ class GetNotify(object):
 
         self.get_notify(title, body)
 
-    def get_notify(sefl, title, body):
+    def get_notify(self, title, body):
         """
             Show desktop notifications for the update
             process

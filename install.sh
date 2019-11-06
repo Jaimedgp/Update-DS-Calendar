@@ -5,7 +5,7 @@ cp -r "$PWD/src/" "$HOME/.bin/Update-DS-Calendar"
 cp -r "$PWD/doc/" "$HOME/.bin/Update-DS-Calendar"
 
 
-".$HOME/.bin/Update-DS-Calendar/src/install.py"
+/usr/bin/python3 "$HOME/.bin/Update-DS-Calendar/src/install.py"
 
 mv "$HOME/.bin/Update-DS-Calendar/src/main.py" "$HOME/.bin/Update-DS-Calendar/src/agenda"
 
