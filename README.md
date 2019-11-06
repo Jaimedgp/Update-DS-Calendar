@@ -3,11 +3,17 @@ Automatize Master Schedule
 
 ## Installation process
 
+Download the repository
+
+``` shell
+git clone https://github.com/Jaimedgp/Update-DS-Calendar.git
+```
+
 The `pip` module is use to install all the missed modules so if you don't have
 it already execute the next line in your prompt
 
 ``` shell
-sudo apt-get install pip3
+sudo apt install python3-pip
 ```
 
 Then you just have to enter in the repository folder and execute the
