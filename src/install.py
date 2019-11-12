@@ -36,7 +36,7 @@ class useCronTab(object):
         self.my_cron = CronTab(user=usr_name)
 
         abs_path = os.path.dirname(os.path.realpath(__file__))
-        self.commnd = "/usr/bin/python3 " + abs_path + "src/main.py "
+        self.commnd = abs_path + "src/agenda "
 
 
     def set_job(self, date, featur):
