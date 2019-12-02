@@ -43,8 +43,12 @@ class ReadDocxFile(object):
         day_week  = self._date.weekday() + 1
         if day_week == 7: day_week = 0
 
+        start_date = self._date.replace(day=1).isocalendar()
+        if start_date[2] == 7:
+            start_date = self._date.replace(day=2).isocalendar()
+
         num_week = (self._date.isocalendar()[1]
-                        - self._date.replace(day=1).isocalendar()[1] + 2)
+                        - start_date[1] + 2)
 
         num_month = self._date.month - 10
 
