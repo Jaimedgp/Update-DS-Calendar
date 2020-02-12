@@ -1,4 +1,4 @@
-@import "./css_spMenu.css";
+@import "./css_Menu.css";
 
 body{ 
 	margin: 0px;
@@ -21,7 +21,7 @@ body::-webkit-scrollbar { display: none; }
 	height: 33vh;
 	z-index: 1;
 
-	background-image: url("../images/sport.jpg");
+	background-image: url("../images/background_min.jpg");
 	background-color: rgb(28, 28, 28);
 	background-repeat: no-repeat;
 	background-size: 100% auto;
