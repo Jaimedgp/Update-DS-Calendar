@@ -1,17 +1,19 @@
 #!/bin/sh
 
-mkdir -p "$HOME/.bin/Update-DS-Calendar/"
-cp -r "$PWD/src/" "$HOME/.bin/Update-DS-Calendar"
-cp -r "$PWD/doc/" "$HOME/.bin/Update-DS-Calendar"
+newFolder = "$HOME/.bin/Update-DS-Calendar/"
+
+mkdir -p "${newFolder}"
+cp -r "$PWD/src/" "${newFolder}"
+cp -r "$PWD/doc/" "${newFolder}"
 
 
-/usr/bin/python3 "$HOME/.bin/Update-DS-Calendar/src/install.py"
+/usr/bin/python3 "${newFolder}/src/install.py"
 
-mv "$HOME/.bin/Update-DS-Calendar/src/main.py" "$HOME/.bin/Update-DS-Calendar/src/agenda"
+mv "${newFolder}/src/main.py" "${newFolder}/src/agenda"
 
-chmod +x "$HOME/.bin/Update-DS-Calendar/src/agenda"
+chmod +x "${newFolder}/src/agenda"
 
-export_line='export PATH=$PATH":$HOME/.bin/Update-DS-Calendar/src"'
+export_line='export PATH=$PATH":${newFolder}/src"'
 
 if ! grep -Fxq "$export_line" $HOME/.bashrc
 then
