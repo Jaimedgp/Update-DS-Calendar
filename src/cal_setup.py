@@ -9,7 +9,7 @@ from google.auth.transport.requests import Request
 SCOPES = ['https://www.googleapis.com/auth/calendar',
           'https://www.googleapis.com/auth/drive']
 
-CREDENTIALS_FILE = '../doc/credentials.json'
+CREDENTIALS_FILE = '../docs/credentials.json'
 
 def get_services():
     creds = None
@@ -17,8 +17,8 @@ def get_services():
     # The file token.pickle stores the user's access and refresh tokens, and is
     # created automatically when the authorization flow completes for the first
     # time.
-    if os.path.exists('../doc/token.pickle'):
-        with open('../doc/token.pickle', 'rb') as token:
+    if os.path.exists('../docs/token.pickle'):
+        with open('../docs/token.pickle', 'rb') as token:
             creds = pickle.load(token)
     # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
@@ -30,7 +30,7 @@ def get_services():
             creds = flow.run_local_server(port=0)
 
         # Save the credentials for the next run
-        with open('../doc/token.pickle', 'wb') as token:
+        with open('../docs/token.pickle', 'wb') as token:
             pickle.dump(creds, token)
 
     service[0] = build('calendar', 'v3', credentials=creds)
