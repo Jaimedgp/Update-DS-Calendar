@@ -18,14 +18,25 @@ body::-webkit-scrollbar { display: none; }
 
 
 .gl-header {
-	height: 33vh;
+	height: 20vh;
 	z-index: 1;
 
-	background-image: url("../images/background_min.jpg");
+	background-image: url("../images/background_min.png");
 	background-color: rgb(28, 28, 28);
 	background-repeat: no-repeat;
 	background-size: 100% auto;
 	background-position: center center;
+}
+
+
+.gl-header h1 {
+    font-size: 15vh;
+    text-align: left;
+    color: white;
+
+    padding: 10px;
+    margin-top: 0px;
+    margin-bottom: 0px;
 }
 
 
