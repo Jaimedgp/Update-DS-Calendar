@@ -93,11 +93,19 @@ class ReadDocxFile(object):
             Some cells have two classes information separated by
             a '----' line, so it is necessary to split both strings
         """
+        singleClss = True
 
         for i, item in enumerate(cell_info):
             if "----" in item:
                 dy_schedule = [cell_info[1:i], cell_info[i+1:]]
                 break
+            elif "h" in item and "-" in item:
+                if singleClss:
+                    singleClss = False
+                else:
+                    dy_schedule = [cell_info[1:i-1], cell_info[i:]]
+                    break
+
         else:
             dy_schedule = [cell_info[1:]]
 
